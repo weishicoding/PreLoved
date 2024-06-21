@@ -1,4 +1,4 @@
-package com.will.emmy.model.personal;
+package com.will.emmy.payload.personal;
 
 import lombok.Data;
 

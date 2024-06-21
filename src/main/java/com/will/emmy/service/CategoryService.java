@@ -2,7 +2,7 @@ package com.will.emmy.service;
 
 
 
-import com.will.emmy.model.category.CategoryTreeFist;
+import com.will.emmy.payload.category.CategoryTreeFist;
 
 import java.util.List;
 

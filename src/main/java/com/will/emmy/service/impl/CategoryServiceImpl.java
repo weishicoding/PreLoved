@@ -1,11 +1,11 @@
 package com.will.emmy.service.impl;
 
-import com.will.emmy.dto.CategoryFist;
-import com.will.emmy.dto.CategorySecond;
-import com.will.emmy.dto.CategoryThird;
-import com.will.emmy.model.category.CategoryTreeFist;
-import com.will.emmy.model.category.CategoryTreeSecond;
-import com.will.emmy.model.category.CategoryTreeThird;
+import com.will.emmy.model.CategoryFist;
+import com.will.emmy.model.CategorySecond;
+import com.will.emmy.model.CategoryThird;
+import com.will.emmy.payload.category.CategoryTreeFist;
+import com.will.emmy.payload.category.CategoryTreeSecond;
+import com.will.emmy.payload.category.CategoryTreeThird;
 import com.will.emmy.repository.CategoryFirstRepository;
 import com.will.emmy.repository.CategorySecondRepository;
 import com.will.emmy.repository.CategoryThirdRepository;

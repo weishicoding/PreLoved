@@ -1,6 +1,6 @@
 package com.will.emmy.controller;
 
-import com.will.emmy.dto.Goods;
+import com.will.emmy.model.Goods;
 import com.will.emmy.exception.ResourceNotFoundException;
 import com.will.emmy.repository.GoodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;

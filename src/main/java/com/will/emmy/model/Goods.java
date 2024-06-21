@@ -1,5 +1,6 @@
-package com.will.emmy.dto;
+package com.will.emmy.model;
 
+import com.will.emmy.model.audit.DateAudit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,11 +8,11 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Table(name = "category_1")
+@Table(name = "goods")
+@Entity
 @Getter
 @Setter
-@Entity
-public class CategoryFist {
+public class Goods extends DateAudit {
 
     @Id
     @GeneratedValue
@@ -19,5 +20,8 @@ public class CategoryFist {
 
     @NotBlank
     @Size(min = 1, max = 30)
-    private String name;
+    private String goodsName;
+
+    @Column(columnDefinition = "text")
+    private String goodsDescription;
 }

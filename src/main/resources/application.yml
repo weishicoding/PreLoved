@@ -13,3 +13,10 @@ spring:
         format_sql: true
       database: postgresql
       database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
+
+app:
+  jwtSecret: 6cd9bf65aa2eb9383d2f489951f1413b6b315344c79f96ca9e121700fd15928b
+  jwtExpirationInMs: 604800000
+

@@ -1,7 +1,7 @@
 package com.will.emmy.controller;
 
 
-import com.will.emmy.model.category.CategoryTreeFist;
+import com.will.emmy.payload.category.CategoryTreeFist;
 import com.will.emmy.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

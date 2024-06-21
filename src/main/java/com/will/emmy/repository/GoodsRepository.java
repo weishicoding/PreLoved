@@ -1,7 +1,7 @@
 package com.will.emmy.repository;
 
 
-import com.will.emmy.dto.Goods;
+import com.will.emmy.model.Goods;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

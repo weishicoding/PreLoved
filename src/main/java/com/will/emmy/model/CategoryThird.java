@@ -1,4 +1,4 @@
-package com.will.emmy.dto;
+package com.will.emmy.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,12 +8,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Table(name = "category_2")
+@Table(name = "category_3")
 @Getter
 @Setter
 @Entity
-public class CategorySecond {
-
+public class CategoryThird {
     @Id
     @GeneratedValue
     private Long id;
@@ -24,4 +23,8 @@ public class CategorySecond {
 
     @NotNull
     private Long category1id;
+
+    @NotNull
+    private Long category2id;
+
 }

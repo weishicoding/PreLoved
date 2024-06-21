@@ -1,4 +1,4 @@
-package com.will.emmy.model.category;
+package com.will.emmy.payload.category;
 
 import lombok.Data;
 

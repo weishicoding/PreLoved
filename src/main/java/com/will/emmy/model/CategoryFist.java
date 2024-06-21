@@ -1,4 +1,4 @@
-package com.will.emmy.dto;
+package com.will.emmy.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,11 +7,11 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Table(name = "goods")
-@Entity
+@Table(name = "category_1")
 @Getter
 @Setter
-public class Goods extends Audit {
+@Entity
+public class CategoryFist {
 
     @Id
     @GeneratedValue
@@ -19,8 +19,5 @@ public class Goods extends Audit {
 
     @NotBlank
     @Size(min = 1, max = 30)
-    private String goodsName;
-
-    @Column(columnDefinition = "text")
-    private String goodsDescription;
+    private String name;
 }
