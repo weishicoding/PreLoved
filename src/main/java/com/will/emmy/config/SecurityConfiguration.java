@@ -36,13 +36,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
                                 "/favicon.ico",
-                                "/**/*.png",
-                                "/**/*.gif",
-                                "/**/*.svg",
-                                "/**/*.jpg",
-                                "/**/*.html",
-                                "/**/*.css",
-                                "/**/*.js")
+                                "/*/*.png",
+                                "/*/*.gif",
+                                "/*/*.svg",
+                                "/*/*.jpg",
+                                "/*/*.html",
+                                "/*/*.css",
+                                "/*/*.js")
                         .permitAll()
                         .requestMatchers("/api/auth/**")
                         .permitAll()

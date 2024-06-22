@@ -23,7 +23,7 @@ public class JwtService {
     private String jwtSecret;
 
     @Value("${app.jwtExpirationInMs}")
-    private int jwtExpirationInMs;
+    private long jwtExpirationInMs;
 
 
     public String getUserNameFromJWT(String token) {
