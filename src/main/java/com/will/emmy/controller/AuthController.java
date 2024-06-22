@@ -88,9 +88,7 @@ public class AuthController {
 
         User result = userRepository.save(user);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/user/{username}")
-                .buildAndExpand(result.getUsername()).toUri();
+        //todo add refresh token at this place
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User register successfully"));
     }
