@@ -1,8 +1,8 @@
 package com.will.emmy.model;
 
+import com.will.emmy.model.audit.DateAudit;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 
 import java.time.Instant;
 
@@ -13,7 +13,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "refresh_token")
-public class RefreshToken {
+public class RefreshToken extends DateAudit {
 
     @Id
     @GeneratedValue
@@ -23,9 +23,7 @@ public class RefreshToken {
 
     private Instant expiryDate;
 
-    @Enumerated(EnumType.STRING)
-    @NaturalId
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 }
