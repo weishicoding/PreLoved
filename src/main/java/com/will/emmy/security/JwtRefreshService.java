@@ -2,7 +2,6 @@ package com.will.emmy.security;
 
 import com.will.emmy.exception.AppException;
 import com.will.emmy.model.RefreshToken;
-import com.will.emmy.model.User;
 import com.will.emmy.repository.RefreshTokenRepository;
 import com.will.emmy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +26,14 @@ public class JwtRefreshService {
 
     public RefreshToken genarateRefreshToken(String username) {
 
-        var user = userRepository.findByUsernameOrEmail(username, username)
+        var user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username or email : " + username)
                 );
 
         var refreshToken = RefreshToken.builder()
                 .user(user)
-                .token(UUID.randomUUID().toString())
+                .token(UUID.randomUUID().toString().replace("-", ""))
                 .expiryDate(Instant.now().plusMillis(refreshTokenExpirationInMs))
                 .build();
         return refreshTokenRepository.save(refreshToken);

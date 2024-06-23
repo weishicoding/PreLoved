@@ -23,10 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
-import java.net.URI;
 import java.util.Collections;
 
 @RestController
@@ -51,7 +48,7 @@ public class AuthController {
 
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getUsername(),
                         loginRequest.getPassword()
                 )
         );
@@ -59,14 +56,17 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtService.generateToken((CustomUserDetail)authentication.getPrincipal());
+        // generate the refresh token
+        var refreshToken = jwtRefreshService.genarateRefreshToken(loginRequest.getUsername());
         return ResponseEntity.ok(JwtAuthenticationResponse.builder()
                 .accessToken(jwt)
+                .refreshToken(refreshToken.getToken())
                 .build());
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        if (userRepository.existsByUsername(registerRequest.getUserName())) {
+        if (userRepository.existsByUsername(registerRequest.getUsername())) {
             return new ResponseEntity<>(new ApiResponse(false, "Username is already taken"), HttpStatus.BAD_REQUEST);
         }
 
@@ -81,16 +81,25 @@ public class AuthController {
         User user = User.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
-                .username(registerRequest.getUserName())
+                .username(registerRequest.getUsername())
                 .roles(Collections.singleton(userRole))
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .build();
 
-        User result = userRepository.save(user);
+        userRepository.save(user);
 
-        //todo add refresh token at this place
+        var customUserDetail = CustomUserDetail.builder()
+                .username(user.getUsername())
+                .build();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User register successfully"));
+        String jwt = jwtService.generateToken(customUserDetail);
+        // generate the refresh token
+        var refreshToken = jwtRefreshService.genarateRefreshToken(user.getUsername());
+
+        return ResponseEntity.ok(JwtAuthenticationResponse.builder()
+                .accessToken(jwt)
+                .refreshToken(refreshToken.getToken())
+                .build());
     }
 
     @PostMapping("/refreshToken/{token}")
