@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.will</groupId>
-	<artifactId>emmy</artifactId>
+	<artifactId>PreLoved</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>emmy</name>
-	<description>emmy for Spring Boot</description>
+	<name>PreLoved</name>
+	<description>PreLoved for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
