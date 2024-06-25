@@ -3,7 +3,7 @@ import { Grid, Paper, Avatar, FormControl, IconButton, InputLabel, OutlinedInput
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import '../variables.css'
 
 export const Login = () => {
 
@@ -16,26 +16,13 @@ export const Login = () => {
   };
 
 	const paperStyle = {padding: 20, height: '70vh', width:400, margin: "20px auto"}
-	const avatarStyle = {backgroundColor: "#4f9d9b"}
-	const loginText = {fontSize: "16px", fontWeight: 700}
-
-	const { palette } = createTheme();
-	const { augmentColor } = palette;
-	const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
-	const theme = createTheme({
-		palette: {
-			anger: createColor('#F40B27'),
-			apple: createColor('#ffeb3be3'),
-			steelBlue: createColor('#5C76B7'),
-			violet: createColor('#BC00A3'),
-		},
-	});
+	const loginText = {fontSize: "16px", fontWeight: 700, color: "black", padding: "4px 0"}
 	return(
 		
 		<Grid>
 			<Paper elevation={10} style={paperStyle}>
 				<Grid align="center">
-					<Avatar style={avatarStyle}>
+					<Avatar sx={{ bgcolor: 'rgb(0, 113, 178)' }}>
 						<LockOutlinedIcon/>
 					</Avatar>
 					<h2>Log in or register</h2>
@@ -68,17 +55,21 @@ export const Login = () => {
             label="Password"
           />
 				</FormControl>
-				<ThemeProvider theme={theme}>
-					<Button variant="contained" size="large" color="apple" fullWidth>
-						<div style={loginText}>Log in</div>
+				<Button variant="contained" className="custom-button margin-top-small" color="primary" size="large" fullWidth>
+					<div style={loginText}>Log in</div>
+				</Button>
+				<Grid align="center" className="margin-top-large">
+					<div>New here?</div>
+					<div>Create an account, it only takes a minute.</div>
+				</Grid>
+				<Grid align="center" className="margin-top-middle">
+					<Button variant="outlined" className="custom-button" color="dark" size="large"  fullWidth >
+						<div style={loginText}>Create an account</div>
 					</Button>
-				</ThemeProvider>
-				
+				</Grid>
 			</Paper>
 		</Grid>
 	)
-	
-	
 }
 
 
