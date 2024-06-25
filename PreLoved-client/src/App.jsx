@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { Login } from './pages/user/login'
+import { Login } from './pages/user/Login'
 
 function App() {
   const [count, setCount] = useState(0)
