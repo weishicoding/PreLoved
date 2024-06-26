@@ -4,7 +4,9 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
 	palette: {
 		primary: {
-			main: 'rgb(255, 215, 104)'
+			main: 'rgb(255, 215, 104)',
+			white: 'white',
+			lightGray: "#e5e7eb" 
 		},
 		secondary: {
 			main: 'rgb(0, 113, 178)'
@@ -13,12 +15,16 @@ const theme = createTheme({
 			main: '#000'
 		}
 	},
-	spacing: 8, // default specing default
+	spacing: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50], // default specing default
 	breakpoints: {
 		
 	},
 	typography: {
-    fontFamily: 'Arial, sans-serif',
+    fontFamily: 'Roboto',
+		button: {
+			fontSize: 16,
+			fontWeight: 700
+		}
   },
 });
 
