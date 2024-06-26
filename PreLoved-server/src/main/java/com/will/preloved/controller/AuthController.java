@@ -14,6 +14,9 @@ import com.will.preloved.repository.UserRepository;
 import com.will.preloved.security.CustomUserDetail;
 import com.will.preloved.security.JwtRefreshService;
 import com.will.preloved.security.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +48,14 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        var user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found with username: " + loginRequest.getUsername())
+                );
+        if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
 
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -57,7 +68,16 @@ public class AuthController {
 
         String jwt = jwtService.generateToken((CustomUserDetail)authentication.getPrincipal());
         // generate the refresh token
-        var refreshToken = jwtRefreshService.genarateRefreshToken(loginRequest.getUsername());
+        RefreshToken refreshToken = jwtRefreshService.genarateRefreshToken(loginRequest.getUsername());
+
+        // add refresh token for http-only cookie
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true); // Use secure cookies in production
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);
+
+        response.addCookie(refreshTokenCookie);
         return ResponseEntity.ok(JwtAuthenticationResponse.builder()
                 .accessToken(jwt)
                 .refreshToken(refreshToken.getToken())
@@ -65,6 +85,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Transactional
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             return new ResponseEntity<>(new ApiResponse(false, "Username is already taken"), HttpStatus.BAD_REQUEST);
@@ -88,18 +109,7 @@ public class AuthController {
 
         userRepository.save(user);
 
-        var customUserDetail = CustomUserDetail.builder()
-                .username(user.getUsername())
-                .build();
-
-        String jwt = jwtService.generateToken(customUserDetail);
-        // generate the refresh token
-        var refreshToken = jwtRefreshService.genarateRefreshToken(user.getUsername());
-
-        return ResponseEntity.ok(JwtAuthenticationResponse.builder()
-                .accessToken(jwt)
-                .refreshToken(refreshToken.getToken())
-                .build());
+        return ResponseEntity.ok("User register successfully");
     }
 
     @PostMapping("/refreshToken/{token}")

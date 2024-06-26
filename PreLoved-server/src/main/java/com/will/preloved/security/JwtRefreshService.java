@@ -4,6 +4,7 @@ import com.will.preloved.exception.AppException;
 import com.will.preloved.model.RefreshToken;
 import com.will.preloved.repository.RefreshTokenRepository;
 import com.will.preloved.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,11 +25,12 @@ public class JwtRefreshService {
     @Value("${app.refreshTokenExpirationInMs}")
     private long refreshTokenExpirationInMs;
 
+    @Transactional
     public RefreshToken genarateRefreshToken(String username) {
 
         var user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username or email : " + username)
+                        new UsernameNotFoundException("User not found with username: " + username)
                 );
 
         var refreshToken = RefreshToken.builder()
