@@ -49,12 +49,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+
         var user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username: " + loginRequest.getUsername())
                 );
         if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new AppException("Invalid credentials");
         }
 
         var authentication = authenticationManager.authenticate(
@@ -82,6 +83,7 @@ public class AuthController {
                 .accessToken(jwt)
                 .refreshToken(refreshToken.getToken())
                 .build());
+
     }
 
     @PostMapping("/register")
@@ -128,6 +130,19 @@ public class AuthController {
                             .refreshToken(token)
                             .build());
                 }).orElseThrow(() -> new AppException("Refresh Token is not in DB.."));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@CookieValue("refreshToken") String refreshToken, HttpServletResponse response) {
+        // delete the refresh token
+        jwtRefreshService.deleteByToken(refreshToken);
+        // Clear the refresh token cookie
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return ResponseEntity.noContent().build();
     }
 
 }

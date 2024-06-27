@@ -9,8 +9,6 @@ import jakarta.validation.constraints.NotBlank;
 @Data
 public class RegisterRequest {
 
-    @NotBlank
-    @Size(min = 4, max = 40)
     private String name;
 
     @NotBlank
