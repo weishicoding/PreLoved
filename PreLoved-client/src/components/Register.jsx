@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import {Grid, Avatar, FormControl, IconButton, InputLabel, OutlinedInput, InputAdornment, TextField, Button, Container, styled, Typography} from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Visibility from '@mui/icons-material/Visibility'
 import axios from 'axios'
 import theme from '../theme'
+import {PersonAddOutlined} from '@mui/icons-material'
 
 const StyledContainer = styled(Container)(({theme}) => ({
   width: 450,
@@ -12,13 +12,17 @@ const StyledContainer = styled(Container)(({theme}) => ({
   marginTop: theme.spacing(5)
 }))
 
-export const Login = () => {
+export const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
   const [usernameError, setUsernameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [formError, setFormError] = useState('')
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -42,6 +46,11 @@ export const Login = () => {
     }
   }
 
+  const handleEmailChange = event => {
+    setEmail(event.target.value)
+    checkEmail(event.target.value)
+  }
+
   const handleUsernameBlur = () => {
     if (!username) {
       setUsernameError('Username is required')
@@ -60,44 +69,64 @@ export const Login = () => {
     }
   }
 
+  const handleEmailBlur = () => {
+    checkEmail(email)
+  }
+
+  const checkEmail = value => {
+    if (!value) {
+      setEmailError('Email is required')
+    } else if (!emailRegex.test(value)) {
+      setEmailError('Invalid email format')
+    } else {
+      setFormError('')
+      setEmailError('')
+    }
+  }
+
   const handleSubmit = async event => {
     event.preventDefault()
-    if (!username && !password) {
+    if (!username && !password && !email) {
       setUsernameError('Username is required')
       setPasswordError('Password is required')
+      setEmailError('Email is required')
       return
     }
+
     if (!username) {
       setUsernameError('Username is required')
       return
     }
+
     if (!password) {
       setPasswordError('Password is required')
       return
     }
 
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/api/login',
-        {
-          username,
-          password
-        },
-        {
-          withCredentials: true // Important for sending cookies
-        }
-      )
+    if (!email) {
+      setEmailError('Email is required')
+      return
+    }
 
-      // Handle successful login (e.g., store tokens, redirect, etc.)
-      console.log('Login successful:', response.data)
+    if (!emailRegex.test(email)) {
+      return
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/register', {
+        username,
+        password,
+        email
+      })
+
+      // Handle successful registration (e.g., redirect to login, show success message, etc.)
+      console.log('Registration successful:', response.data)
 
       // Clear errors
       setFormError('')
-      setUsernameError('')
-      setPasswordError('')
     } catch (error) {
-      console.error('Login error:', error)
-      setFormError('Invalid username or password')
+      console.error('Registration error:', error)
+      setFormError('Registration failed. Please try again.')
     }
   }
 
@@ -105,9 +134,9 @@ export const Login = () => {
     <StyledContainer>
       <Grid align="center">
         <Avatar sx={{bgcolor: 'rgb(0, 113, 178)'}}>
-          <LockOutlinedIcon />
+          <PersonAddOutlined />
         </Avatar>
-        <h2>Log in or register</h2>
+        <h2>Create an account</h2>
       </Grid>
       <form onSubmit={handleSubmit}>
         <FormControl variant="outlined" fullWidth margin="normal">
@@ -149,6 +178,12 @@ export const Login = () => {
             {passwordError}
           </Typography>
         </FormControl>
+        <FormControl variant="outlined" fullWidth margin="normal">
+          <TextField id="outlined-email-flexible" label="Email" value={email} onChange={handleEmailChange} onBlur={handleEmailBlur} error={!!emailError} />
+          <Typography variant="body2" color="error">
+            {emailError}
+          </Typography>
+        </FormControl>
         {formError && (
           <Typography variant="body2" color="error">
             {formError}
@@ -156,21 +191,10 @@ export const Login = () => {
         )}
         <Button type="submit" variant="contained" color="primary" size="large" fullWidth style={{marginTop: theme.spacing(1)}}>
           <Typography variant="button" align="center">
-            Log in
+            Create an account
           </Typography>
         </Button>
       </form>
-      <Typography variant="subtitle2" align="center" style={{marginTop: theme.spacing(7)}}>
-        New here?
-      </Typography>
-      <Typography variant="subtitle2" align="center">
-        Create an account, it only takes a minute.
-      </Typography>
-      <Button variant="outlined" color="dark" size="large" fullWidth style={{marginTop: theme.spacing(1)}}>
-        <Typography variant="button" align="center">
-          Create an account
-        </Typography>
-      </Button>
     </StyledContainer>
   )
 }

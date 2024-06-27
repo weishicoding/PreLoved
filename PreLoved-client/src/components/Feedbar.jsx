@@ -1,5 +1,6 @@
 import React from 'react'
 import {Login} from './Login'
+import { Register } from './Register'
 import {ArrowBack, ArrowBackIosNew} from '@mui/icons-material'
 import {Box, Typography} from '@mui/material'
 
@@ -10,7 +11,8 @@ export const Feedbar = () => {
         <ArrowBackIosNew></ArrowBackIosNew>
         <Typography variant="subtitle1">Back</Typography>
       </Box>
-      <Login></Login>
+      {/* <Login></Login> */}
+			<Register></Register>
     </>
   )
 }
