@@ -3,8 +3,8 @@ import {Grid, Avatar, FormControl, IconButton, InputLabel, OutlinedInput, InputA
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Visibility from '@mui/icons-material/Visibility'
-import axios from 'axios'
 import theme from '../theme'
+import axiosInstance from '../services/http'
 
 const StyledContainer = styled(Container)(({theme}) => ({
   width: 450,
@@ -77,19 +77,11 @@ export const Login = () => {
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/login',
-        {
-          username,
-          password
-        },
-        {
-          withCredentials: true // Important for sending cookies
-        }
-      )
-
-      // Handle successful login (e.g., store tokens, redirect, etc.)
-      console.log('Login successful:', response.data)
+      const response = await axiosInstance.post("/auth/login", {
+        username,
+        password
+      })
+			console.log(response)
 
       // Clear errors
       setFormError('')
@@ -97,7 +89,7 @@ export const Login = () => {
       setPasswordError('')
     } catch (error) {
       console.error('Login error:', error)
-      setFormError('Invalid username or password')
+      setFormError("Invalid Username or Password")
     }
   }
 

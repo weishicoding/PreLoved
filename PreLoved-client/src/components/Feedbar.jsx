@@ -11,8 +11,8 @@ export const Feedbar = () => {
         <ArrowBackIosNew></ArrowBackIosNew>
         <Typography variant="subtitle1">Back</Typography>
       </Box>
-      {/* <Login></Login> */}
-			<Register></Register>
+      <Login></Login>
+			{/* <Register></Register> */}
     </>
   )
 }

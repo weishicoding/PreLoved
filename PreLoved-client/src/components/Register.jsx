@@ -5,6 +5,7 @@ import Visibility from '@mui/icons-material/Visibility'
 import axios from 'axios'
 import theme from '../theme'
 import {PersonAddOutlined} from '@mui/icons-material'
+import axiosInstance from '../services/http'
 
 const StyledContainer = styled(Container)(({theme}) => ({
   width: 450,
@@ -113,20 +114,14 @@ export const Register = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/register', {
+      const response = await axiosInstance.post('/auth/register', {
         username,
         password,
         email
       })
-
-      // Handle successful registration (e.g., redirect to login, show success message, etc.)
-      console.log('Registration successful:', response.data)
-
-      // Clear errors
       setFormError('')
     } catch (error) {
-      console.error('Registration error:', error)
-      setFormError('Registration failed. Please try again.')
+      setFormError(error.response.data.message)
     }
   }
 
