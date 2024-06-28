@@ -1,18 +1,10 @@
-import { useState } from 'react'
-import { Login } from './components/Login';
-import { Sidebar } from './components/Sidebar';
-import { Navbar } from './components/Navbar';
-import { Feedbar } from './components/Feedbar';
+import Home from './data/Home'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-		<div className="App">
-			<Sidebar/>
-			<Navbar/>
-			<Feedbar/>
-		</div>
+    <div className="App">
+      <Home />
+    </div>
   )
 }
 
