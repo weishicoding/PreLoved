@@ -5,17 +5,18 @@ import {MdFavoriteBorder, MdOutlinePerson, MdOutlineSearch, MdOutlineShoppingCar
 import {PiFire, PiFireSimpleBold} from 'react-icons/pi'
 import logo from '../../assets/images/second-hand.png'
 
-const Header = ({onLogin}) => {
+const Header = ({isLogin, onLogin}) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => {
-		if (localStorage.getItem("accessToken")) {
-			setOpen(open => !open)
-		} else {
-			onLogin()
-		}
+    if (isLogin) {
+      setOpen(open => !open)
+    } else {
+      onLogin('login')
+    }
   }
   const handleLogout = () => {
     setOpen(false)
+    onLogin('home')
   }
   return (
     <>
@@ -52,7 +53,7 @@ const Header = ({onLogin}) => {
               <span>Cart</span>
               <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-circle badge">12</span>
             </div>
-            {open && (
+            {isLogin && open && (
               <div className="logout">
                 <div>{`username`}</div>
                 <button type="button" className="btn py-2 px-5" onClick={handleLogout}>
