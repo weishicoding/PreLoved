@@ -25,20 +25,20 @@ const Header = () => {
           <div className="d-flex-end d-flex icon-text">
             <div className="icon-container ">
               <PiFireSimpleBold size={24}></PiFireSimpleBold>
-              <p>Sell Now</p>
+              <span>Sell Now</span>
               <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-pill badge">New!</span>
             </div>
             <div className="icon-container ">
               <MdFavoriteBorder size={24}></MdFavoriteBorder>
-              <p>Favorites</p>
+              <span>Favorites</span>
             </div>
             <div className="icon-container ">
               <MdOutlinePerson size={24}></MdOutlinePerson>
-              <p>Account</p>
+              <span>Account</span>
             </div>
             <div className="icon-container">
               <MdOutlineShoppingCart size={24}></MdOutlineShoppingCart>
-              <p>Cart</p>
+              <span>Cart</span>
               <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-circle badge">12</span>
             </div>
           </div>

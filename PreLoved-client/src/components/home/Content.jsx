@@ -7,7 +7,7 @@ const Content = () => {
     <>
       <div className="d-flex ps-3 product-head">
         <div className="desc-div">
-          <div className="home">Home</div>
+          <div className="home on-point">Home</div>
           <div className="category-name">Men</div>
           <div className='category-desc'>
             The best fashion hits, design items and high-quality brands from Scandinavia - In the Emmy men's category, you will find thousands of used items: clothes, bags, shoes
