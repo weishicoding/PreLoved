@@ -1,0 +1,22 @@
+.side-bar {
+  background-color: rgb(219 215 215 / 17%);
+  height: 100%;
+  width: 15%;
+}
+
+.category-first-name {
+  font-size: 16px;
+	font-weight: 700;
+}
+
+.category-second-name {
+  font-size: 14px;
+}
+
+.category-count {
+  align-items: center;
+  margin-left: 10px;
+  padding-top: 3px;
+  font-size: 12px;
+  color: rgb(130 130 130);
+}
