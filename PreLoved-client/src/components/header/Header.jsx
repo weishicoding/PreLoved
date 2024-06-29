@@ -1,11 +1,22 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './header.css'
 import {Form, InputGroup, Stack} from 'react-bootstrap'
 import {MdFavoriteBorder, MdOutlinePerson, MdOutlineSearch, MdOutlineShoppingCart} from 'react-icons/md'
 import {PiFire, PiFireSimpleBold} from 'react-icons/pi'
 import logo from '../../assets/images/second-hand.png'
 
-const Header = () => {
+const Header = ({onLogin}) => {
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => {
+		if (localStorage.getItem("accessToken")) {
+			setOpen(open => !open)
+		} else {
+			onLogin()
+		}
+  }
+  const handleLogout = () => {
+    setOpen(false)
+  }
   return (
     <>
       <Stack>
@@ -32,7 +43,7 @@ const Header = () => {
               <MdFavoriteBorder size={24}></MdFavoriteBorder>
               <span>Favorites</span>
             </div>
-            <div className="icon-container ">
+            <div className="icon-container" onClick={handleOpen}>
               <MdOutlinePerson size={24}></MdOutlinePerson>
               <span>Account</span>
             </div>
@@ -41,6 +52,14 @@ const Header = () => {
               <span>Cart</span>
               <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-circle badge">12</span>
             </div>
+            {open && (
+              <div className="logout">
+                <div>{`username`}</div>
+                <button type="button" className="btn py-2 px-5" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </Stack>
       </Stack>
