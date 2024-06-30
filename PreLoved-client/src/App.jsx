@@ -7,19 +7,15 @@ import {useState} from 'react'
 
 function App() {
   const [isLogin, setIsLogin] = useState(!!localStorage.getItem('accessToken'))
+	const [mainPage, setMainPage] = useState('login')
   const changeLoginStatus = value => {
-    if (value == 'home') {
-      console.log(value)
-    }
-    if (value == 'login') {
-      console.log(value)
-    }
+    setMainPage(value)
   }
   return (
     <div className="">
       <Header isLogin={isLogin} onLogin={changeLoginStatus} />
       <Menu />
-      <Home />
+      <Home nav={mainPage}/>
     </div>
   )
 }
