@@ -4,17 +4,11 @@ import Sidebar from './Sidebar'
 import Content from './Content'
 import Login from '../login/Login'
 
-const Home = ({nav}) => {
+const Home = () => {
   return (
-    <div className="mt-3">
-      {nav == 'home' ? (
-        <div className="d-flex">
-          <Sidebar />
-          <Content />
-        </div>
-      ) : (
-        <Login />
-      )}
+    <div className="mt-3 d-flex">
+      <Sidebar />
+      <Content />
     </div>
   )
 }

@@ -1,8 +1,18 @@
 import React, {useState} from 'react'
 import './login.css'
 import {Col, Form, FormGroup, Row, Stack} from 'react-bootstrap'
+import {useLocation, useNavigate} from 'react-router-dom'
+import axios from '../../api/axios'
+import useAuth from '../../hooks/useAuth'
 
+const LOGIN_URL = '/api/auth/login'
 const Login = () => {
+  const {setAuth} = useAuth()
+
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [usernameError, setUsernameError] = useState(null)
@@ -47,7 +57,25 @@ const Login = () => {
       setPasswordError('Password is required')
       return
     }
-    setFormError('Invalid Username or Password')
+
+    try {
+      const response = await axios.post(LOGIN_URL, JSON.stringify({username, password}), {headers: {'Content-Type': 'application/json'}, withCredentials: true})
+      const accessToken = response?.data?.accessToken
+      const roles = response?.data?.roles
+      setAuth({username, password, roles, accessToken})
+      setUsername('')
+      setPassword('')
+      setFormError('')
+      navigate(from, {replace: true})
+    } catch (error) {
+      if (!error.response) {
+        setFormError('No Server Response')
+      } else if (error.response?.status === 401) {
+        setFormError('Invalid Username or Password')
+      } else {
+        setFormError('Login Failed')
+      }
+    }
   }
 
   return (
