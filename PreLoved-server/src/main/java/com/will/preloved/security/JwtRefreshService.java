@@ -2,6 +2,7 @@ package com.will.preloved.security;
 
 import com.will.preloved.exception.AppException;
 import com.will.preloved.model.RefreshToken;
+import com.will.preloved.model.User;
 import com.will.preloved.repository.RefreshTokenRepository;
 import com.will.preloved.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -20,18 +21,11 @@ public class JwtRefreshService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final UserRepository userRepository;
-
     @Value("${app.refreshTokenExpirationInMs}")
     private long refreshTokenExpirationInMs;
 
     @Transactional
-    public RefreshToken genarateRefreshToken(String username) {
-
-        var user = userRepository.findByUsername(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username: " + username)
-                );
+    public RefreshToken genarateRefreshToken(User user) {
 
         var refreshToken = RefreshToken.builder()
                 .user(user)

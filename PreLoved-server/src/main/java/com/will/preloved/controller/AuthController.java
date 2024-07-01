@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +34,7 @@ import java.util.Collections;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -50,39 +52,47 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
-        var user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username: " + loginRequest.getUsername())
-                );
-        if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new AppException("Invalid credentials");
+        try {
+            var user = userRepository.findByUsername(loginRequest.getUsername())
+                    .orElseThrow(() ->
+                            new UsernameNotFoundException("User not found with username: " + loginRequest.getUsername())
+                    );
+            if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                throw new AppException("Invalid credentials");
+            }
+
+            var authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()
+                    )
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = jwtService.generateToken((CustomUserDetail)authentication.getPrincipal());
+            // generate the refresh token
+            RefreshToken refreshToken = jwtRefreshService.genarateRefreshToken(user);
+
+            // add refresh token for http-only cookie
+            Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
+            refreshTokenCookie.setHttpOnly(true);
+            refreshTokenCookie.setSecure(true); // Use secure cookies in production
+            refreshTokenCookie.setPath("/");
+
+            response.addCookie(refreshTokenCookie);
+            return ResponseEntity.ok(JwtAuthenticationResponse.builder()
+                    .accessToken(jwt)
+                    .roles(user.getRoles())
+                    .refreshToken(refreshToken.getToken())
+                    .build());
+        } catch (Exception e) {
+            log.error("unauthorized", e);
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
-        var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = jwtService.generateToken((CustomUserDetail)authentication.getPrincipal());
-        // generate the refresh token
-        RefreshToken refreshToken = jwtRefreshService.genarateRefreshToken(loginRequest.getUsername());
-
-        // add refresh token for http-only cookie
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true); // Use secure cookies in production
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);
-
-        response.addCookie(refreshTokenCookie);
-        return ResponseEntity.ok(JwtAuthenticationResponse.builder()
-                .accessToken(jwt)
-                .refreshToken(refreshToken.getToken())
-                .build());
 
     }
 
@@ -114,7 +124,7 @@ public class AuthController {
         return ResponseEntity.ok("User register successfully");
     }
 
-    @PostMapping("/refreshToken/{token}")
+    @GetMapping("/refreshToken/{token}")
     public ResponseEntity<?> refreshToken(@PathVariable String token) {
 
         return jwtRefreshService.findByToken(token)
