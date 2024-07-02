@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import './header.css'
-import {Form, InputGroup, Stack} from 'react-bootstrap'
+import {Stack} from 'react-bootstrap'
 import {MdFavoriteBorder, MdOutlinePerson, MdOutlineSearch, MdOutlineShoppingCart} from 'react-icons/md'
-import {PiFire, PiFireSimpleBold} from 'react-icons/pi'
+import {PiFireSimpleBold} from 'react-icons/pi'
 import logo from '../../assets/images/second-hand.png'
 import useAuth from '../../hooks/useAuth'
 import {useNavigate} from 'react-router-dom'
@@ -66,7 +66,7 @@ const Header = () => {
             </div>
             {auth && open && (
               <div className="logout">
-                <div>{`username`}</div>
+                <div>{auth?.username}</div>
                 <button type="button" className="btn py-2 px-5" onClick={handleLogout}>
                   Logout
                 </button>

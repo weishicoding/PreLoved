@@ -62,7 +62,7 @@ const Login = () => {
       const response = await axios.post(LOGIN_URL, JSON.stringify({username, password}), {headers: {'Content-Type': 'application/json'}, withCredentials: true})
       const accessToken = response?.data?.accessToken
       const roles = response?.data?.roles
-      setAuth({username, password, roles, accessToken})
+      setAuth({username, roles, accessToken})
       setUsername('')
       setPassword('')
       setFormError('')
