@@ -6,10 +6,11 @@ const AuthRedireact = ({children}) => {
   const {auth} = useAuth()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
-  if (auth == null) {
+ 
+  if (auth != null) {
     return <Navigate to={from} />
   }
-	return children;
+  return children
 }
 
-export default AuthRedireact;
+export default AuthRedireact

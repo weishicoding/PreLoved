@@ -4,19 +4,30 @@ import {Form, InputGroup, Stack} from 'react-bootstrap'
 import {MdFavoriteBorder, MdOutlinePerson, MdOutlineSearch, MdOutlineShoppingCart} from 'react-icons/md'
 import {PiFire, PiFireSimpleBold} from 'react-icons/pi'
 import logo from '../../assets/images/second-hand.png'
+import useAuth from '../../hooks/useAuth'
+import {useNavigate} from 'react-router-dom'
+import axios from '../../api/axios'
 
-const Header = ({isLogin, onLogin}) => {
+const Header = () => {
+  const {auth, setAuth} = useAuth()
   const [open, setOpen] = useState(false)
-  const handleOpen = () => {
-    if (isLogin) {
-      setOpen(open => !open)
+  const navigate = useNavigate()
+  const handleLoginOpen = () => {
+    if (!auth) {
+      navigate('/login')
     } else {
-      onLogin('login')
+      setOpen(open => !open)
     }
   }
-  const handleLogout = () => {
-    setOpen(false)
-    onLogin('home')
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get('/api/auth/logout', {withCredentials: true})
+      setAuth(null)
+      setOpen(false)
+      navigate('/login')
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
     <>
@@ -44,7 +55,7 @@ const Header = ({isLogin, onLogin}) => {
               <MdFavoriteBorder size={24}></MdFavoriteBorder>
               <span>Favorites</span>
             </div>
-            <div className="icon-container" onClick={handleOpen}>
+            <div className="icon-container" onClick={handleLoginOpen}>
               <MdOutlinePerson size={24}></MdOutlinePerson>
               <span>Account</span>
             </div>
@@ -53,7 +64,7 @@ const Header = ({isLogin, onLogin}) => {
               <span>Cart</span>
               <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-circle badge">12</span>
             </div>
-            {isLogin && open && (
+            {auth && open && (
               <div className="logout">
                 <div>{`username`}</div>
                 <button type="button" className="btn py-2 px-5" onClick={handleLogout}>
