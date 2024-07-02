@@ -16,10 +16,8 @@ import java.time.Instant;
 public class RefreshToken extends DateAudit {
 
     @Id
-    @GeneratedValue
-    private Long id;
-
-    private String token;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private Instant expiryDate;
 

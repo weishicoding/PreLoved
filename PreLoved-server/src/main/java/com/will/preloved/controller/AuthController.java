@@ -15,6 +15,7 @@ import com.will.preloved.security.CustomUserDetail;
 import com.will.preloved.security.JwtRefreshService;
 import com.will.preloved.security.JwtService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -75,7 +76,7 @@ public class AuthController {
             RefreshToken refreshToken = jwtRefreshService.genarateRefreshToken(user);
 
             // add refresh token for http-only cookie
-            Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
+            Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getId());
             refreshTokenCookie.setHttpOnly(true);
             refreshTokenCookie.setSecure(true); // Use secure cookies in production
             refreshTokenCookie.setPath("/");
@@ -84,75 +85,91 @@ public class AuthController {
             return ResponseEntity.ok(JwtAuthenticationResponse.builder()
                     .accessToken(jwt)
                     .roles(user.getRoles())
-                    .refreshToken(refreshToken.getToken())
+                    .refreshToken(refreshToken.getId())
                     .build());
         } catch (Exception e) {
             log.error("unauthorized", e);
             return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
-
-
-
-
     }
 
     @PostMapping("/register")
     @Transactional
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken"), HttpStatus.BAD_REQUEST);
+        try {
+            if (userRepository.existsByUsername(registerRequest.getUsername())) {
+                return new ResponseEntity<>(new ApiResponse(false, "Username is already taken"), HttpStatus.BAD_REQUEST);
+            }
+
+            if (userRepository.existsByEmail(registerRequest.getEmail())) {
+                return new ResponseEntity<>(new ApiResponse(false, "Email Address is already taken"), HttpStatus.BAD_REQUEST);
+            }
+
+            // create user's account
+            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                    .orElseThrow(() -> new AppException("User Role not set"));
+
+            User user = User.builder()
+                    .name(registerRequest.getName())
+                    .email(registerRequest.getEmail())
+                    .username(registerRequest.getUsername())
+                    .roles(Collections.singleton(userRole))
+                    .password(passwordEncoder.encode(registerRequest.getPassword()))
+                    .build();
+
+            userRepository.save(user);
+
+            return ResponseEntity.ok("User register successfully");
+        } catch (Exception e) {
+            log.info("Register Failed", e);
+            return new ResponseEntity<>("Register Failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Email Address is already taken"), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/refreshToken")
+    public ResponseEntity<?> refreshToken(@CookieValue("refreshToken") String refreshToken, HttpServletRequest request) {
+
+        try {
+            return jwtRefreshService.findById(refreshToken)
+                    .map(jwtRefreshService::verifyExpiration)
+                    .map(RefreshToken::getUser)
+                    .map(user -> {
+                        var customUserDetail = CustomUserDetail.builder()
+                                .username(user.getUsername())
+                                .build();
+                        String accessToken = jwtService.generateToken(customUserDetail);
+                        return ResponseEntity.ok(JwtAuthenticationResponse.builder()
+                                .accessToken(accessToken)
+                                .roles(user.getRoles())
+                                .refreshToken(refreshToken)
+                                .build());
+                    }).orElseThrow(() -> new AppException("Refresh Token is not in DB.."));
+        }catch (Exception e) {
+            log.info("Refresh Token Failed", e);
+            return new ResponseEntity<>("Refresh Token Failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        // create user's account
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set"));
-
-        User user = User.builder()
-                .name(registerRequest.getName())
-                .email(registerRequest.getEmail())
-                .username(registerRequest.getUsername())
-                .roles(Collections.singleton(userRole))
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .build();
-
-        userRepository.save(user);
-
-        return ResponseEntity.ok("User register successfully");
     }
 
-    @GetMapping("/refreshToken/{token}")
-    public ResponseEntity<?> refreshToken(@PathVariable String token) {
-
-        return jwtRefreshService.findByToken(token)
-                .map(jwtRefreshService::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    var customUserDetail = CustomUserDetail.builder()
-                            .username(user.getUsername())
-                            .build();
-                    String accessToken = jwtService.generateToken(customUserDetail);
-                    return ResponseEntity.ok(JwtAuthenticationResponse.builder()
-                            .accessToken(accessToken)
-                            .refreshToken(token)
-                            .build());
-                }).orElseThrow(() -> new AppException("Refresh Token is not in DB.."));
-    }
-
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity<?> logout(@CookieValue("refreshToken") String refreshToken, HttpServletResponse response) {
-        // delete the refresh token
-        jwtRefreshService.deleteByToken(refreshToken);
-        // Clear the refresh token cookie
-        Cookie cookie = new Cookie("refreshToken", null);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-        return ResponseEntity.noContent().build();
+        try {
+            // delete the refresh token
+            jwtRefreshService.deleteById(refreshToken);
+            // Clear the refresh token cookie
+            Cookie cookie = new Cookie("refreshToken", null);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+            return ResponseEntity.ok("Logout successfully");
+        } catch (Exception e) {
+            log.info("Logout failed", e);
+            return new ResponseEntity<>("Logout failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
     }
 
 }

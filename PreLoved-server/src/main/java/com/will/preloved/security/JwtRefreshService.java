@@ -29,19 +29,18 @@ public class JwtRefreshService {
 
         var refreshToken = RefreshToken.builder()
                 .user(user)
-                .token(UUID.randomUUID().toString().replace("-", ""))
                 .expiryDate(Instant.now().plusMillis(refreshTokenExpirationInMs))
                 .build();
         return refreshTokenRepository.save(refreshToken);
 
     }
 
-    public Optional<RefreshToken> findByToken(String token) {
-        return refreshTokenRepository.findByToken(token);
+    public Optional<RefreshToken> findById(String token) {
+        return refreshTokenRepository.findById(token);
     }
 
-    public void deleteByToken(String token) {
-        refreshTokenRepository.deleteByToken(token);
+    public void deleteById(String token) {
+        refreshTokenRepository.deleteById(token);
     }
 
     public RefreshToken verifyExpiration(RefreshToken token) {
