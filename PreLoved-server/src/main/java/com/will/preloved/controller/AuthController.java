@@ -85,7 +85,7 @@ public class AuthController {
             return ResponseEntity.ok(JwtAuthenticationResponse.builder()
                     .accessToken(jwt)
                     .roles(user.getRoles())
-                    .refreshToken(refreshToken.getId())
+                    .username(user.getUsername())
                     .build());
         } catch (Exception e) {
             log.error("unauthorized", e);
@@ -142,7 +142,7 @@ public class AuthController {
                         return ResponseEntity.ok(JwtAuthenticationResponse.builder()
                                 .accessToken(accessToken)
                                 .roles(user.getRoles())
-                                .refreshToken(refreshToken)
+                                .username(user.getUsername())
                                 .build());
                     }).orElseThrow(() -> new AppException("Refresh Token is not in DB.."));
         }catch (Exception e) {
