@@ -6,9 +6,20 @@
 	position: absolute;
 	width: 100%;
 	z-index: 999;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 .pop-cover.show{
 	opacity: 1;
 	transform: translateY(-2px);
+}
+
+.category-parent-name {
+  font-size: 15px;
+	font-weight: 700;
+}
+
+.category-child-name {
+  font-size: 13px;
+	margin-top: 10px;
 }
