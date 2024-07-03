@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryTreeThird {
+public class Category {
 
-    private Long levelThreeId;
+    private Long id;
 
-    private String levelThreeName;
+    private String name;
 
-
+    List<Category> categoryChildren;
 }

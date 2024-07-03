@@ -3,9 +3,7 @@ package com.will.preloved.service.impl;
 import com.will.preloved.model.CategoryFist;
 import com.will.preloved.model.CategorySecond;
 import com.will.preloved.model.CategoryThird;
-import com.will.preloved.payload.category.CategoryTreeFist;
-import com.will.preloved.payload.category.CategoryTreeSecond;
-import com.will.preloved.payload.category.CategoryTreeThird;
+import com.will.preloved.payload.category.Category;
 import com.will.preloved.repository.CategoryFirstRepository;
 import com.will.preloved.repository.CategorySecondRepository;
 import com.will.preloved.repository.CategoryThirdRepository;
@@ -34,47 +32,42 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public List<CategoryTreeFist> getCategoryTree() {
-
+    public List<Category> getCategoryFirst() {
         // Fetch all categories from the repositories
         List<CategoryFist> categoryFists = firstRepository.findAll();
-        List<CategorySecond> categorySeconds = secondRepository.findAll();
-        List<CategoryThird> categoryThirds = thirdRepository.findAll();
+        return categoryFists.stream().map(categoryFist -> {
+            Category categoryFirst = new Category();
+            categoryFirst.setId(categoryFist.getId());
+            categoryFirst.setName(categoryFist.getName());
+            return categoryFirst;
+        }).collect(Collectors.toList());
+    }
 
-        // Group the second and third level categories by their parent IDs
-        Map<Long, List<CategorySecond>> secondListMap = categorySeconds.stream()
-                .collect(Collectors.groupingBy(CategorySecond::getCategory1id));
+
+    @Override
+    public List<Category> getCategoryTree(Long categoryId) {
+
+        List<CategorySecond> categorySeconds = secondRepository.findByCategory1id(categoryId);
+        List<CategoryThird> categoryThirds = thirdRepository.findByCategory1id(categoryId);
 
         Map<Long, List<CategoryThird>> thirdListMap = categoryThirds.stream()
                 .collect(Collectors.groupingBy(CategoryThird::getCategory2id));
 
         // Construct the category tree
-        return categoryFists.stream().map(categoryFist -> {
-            CategoryTreeFist categoryTreeFist = new CategoryTreeFist();
-            categoryTreeFist.setLevelOneId(categoryFist.getId());
-            categoryTreeFist.setLevelOneName(categoryFist.getName());
+        return categorySeconds.stream().map(categorySecond -> {
+            Category category = new Category();
+            category.setName(categorySecond.getName());
+            category.setId(categorySecond.getId());
 
-            List<CategoryTreeSecond> categoryTreeSeconds = secondListMap.getOrDefault(categoryFist.getId(), Collections.emptyList()).stream()
-                    .map(categorySecond -> {
-                        CategoryTreeSecond categoryTreeSecond = CategoryTreeSecond.builder()
-                                .levelTwoId(categorySecond.getId())
-                                .levelTwoName(categorySecond.getName())
-                                .build();
-
-                        List<CategoryTreeThird> categoryTreeThirds = thirdListMap.getOrDefault(categorySecond.getId(), Collections.emptyList()).stream()
-                                .map(categoryThird -> CategoryTreeThird.builder()
-                                        .levelThreeId(categoryThird.getId())
-                                        .levelThreeName(categoryThird.getName())
-                                        .build())
-                                .collect(Collectors.toList());
-
-                        categoryTreeSecond.setCategoryTreeThirds(categoryTreeThirds);
-                        return categoryTreeSecond;
-                    })
+            List<Category> categoryThirdList = thirdListMap.getOrDefault(categorySecond.getId(), Collections.emptyList()).stream()
+                    .map(categoryThird -> Category.builder()
+                            .id(categoryThird.getId())
+                            .name(categoryThird.getName())
+                            .build())
                     .collect(Collectors.toList());
 
-            categoryTreeFist.setCategoryTreeSeconds(categoryTreeSeconds);
-            return categoryTreeFist;
+            category.setCategoryChildren(categoryThirdList);
+            return category;
         }).collect(Collectors.toList());
     }
 }

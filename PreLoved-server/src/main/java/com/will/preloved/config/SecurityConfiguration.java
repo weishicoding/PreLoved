@@ -44,7 +44,8 @@ public class SecurityConfiguration {
                                 "/*/*.css",
                                 "/*/*.js")
                         .permitAll()
-                        .requestMatchers("/api/auth/**")
+                        .requestMatchers("/api/auth/**",
+                                "/category/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
