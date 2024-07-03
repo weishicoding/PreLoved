@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import './header.css'
 import {Stack} from 'react-bootstrap'
 import {MdFavoriteBorder, MdOutlinePerson, MdOutlineSearch, MdOutlineShoppingCart} from 'react-icons/md'
@@ -29,6 +29,7 @@ const Header = () => {
       console.log(error)
     }
   }
+
   return (
     <>
       <Stack>

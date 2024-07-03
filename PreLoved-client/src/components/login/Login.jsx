@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import './login.css'
+import './index.css'
 import {Col, Form, FormGroup, Row, Stack} from 'react-bootstrap'
 import {useLocation, useNavigate} from 'react-router-dom'
 import axios from '../../api/axios'
@@ -42,6 +42,10 @@ const Login = () => {
       setFormError('')
     }
   }
+
+  const handleRegister = () => {
+    navigate('/register')
+  }
   const handleSubmit = async event => {
     event.preventDefault()
     if (!username && !password) {
@@ -80,7 +84,7 @@ const Login = () => {
 
   return (
     <>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-md-center mt-5">
         <Col xs lg="1"></Col>
         <Col md="auto">
           <div className="fs-2 fw-bolder text-center">Log in or register</div>
@@ -125,7 +129,7 @@ const Login = () => {
           <div className="mt-5 text-center">New here?</div>
           <div className="mt-1 text-center">Create an account, it only takes a minute.</div>
           <Stack className="mt-2">
-            <button type="submit" className="btn btn-register ">
+            <button type="button" className="btn btn-register" onClick={handleRegister}>
               Create an account
             </button>
           </Stack>

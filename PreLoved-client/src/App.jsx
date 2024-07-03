@@ -9,6 +9,7 @@ import Login from './components/login/Login'
 import RequiredAuth from './components/RequiredAuth'
 import AuthRedireact from './components/AuthRedireact'
 import PersistLogin from './components/PersistLogin'
+import {Register} from './components/login/Register'
 
 function App() {
   return (
@@ -16,8 +17,8 @@ function App() {
       <Header />
       <Menu />
       <Routes>
+        <Route path="/" element={<Home />}></Route>
         <Route element={<PersistLogin />}>
-          <Route path="/" element={<Home />}></Route>
           <Route
             path="/login"
             element={
@@ -27,6 +28,7 @@ function App() {
             }
           ></Route>
         </Route>
+        <Route path="/register" element={<Register />}></Route>
         <Route element={<RequiredAuth />}> </Route>
       </Routes>
     </div>
