@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import './index.css'
 import axios from '../../api/axios'
 import {Alert, Col, Form, FormGroup, Row, Stack} from 'react-bootstrap'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
+import './index.css'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const REGISTER_URL = '/api/auth/register'
