@@ -1,15 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Home from './components/home/Home'
 import Header from './components/header/Header'
 import './app.css'
+import './styles/style.css'
 import Menu from './components/menu/Menu'
-import {useState} from 'react'
 import {Route, Routes} from 'react-router-dom'
 import Login from './components/login/Login'
 import RequiredAuth from './components/RequiredAuth'
 import AuthRedireact from './components/AuthRedireact'
 import PersistLogin from './components/PersistLogin'
 import {Register} from './components/login/Register'
+import Home from './pages/Home'
 
 function App() {
   return (

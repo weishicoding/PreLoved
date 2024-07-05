@@ -1,0 +1,14 @@
+.favorite-tip {
+  position: absolute;
+  top: 2rem;
+  right: 1rem;
+}
+
+.head-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
