@@ -12,3 +12,25 @@
   object-fit: cover;
   display: block;
 }
+
+.product-list {
+	display: flex;
+	flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 1rem;
+}
+
+.product-list::-webkit-scrollbar {
+  height: 8px;
+}
+
+.product-list::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.product-list::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 4px;
+}
