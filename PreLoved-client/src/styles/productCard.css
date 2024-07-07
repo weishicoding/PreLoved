@@ -1,3 +1,18 @@
+.card-img-div {
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+.card-img-div :hover {
+  transform: scale(1.03); /* Adjust the scale value as needed */
+}
+
+.product-image {
+  transition: transform 0.3s ease;
+}
+
+.card-img-div :hover .product-image {
+  transform: scale(1.1); /* Adjust the scale value as needed */
+}
 .favorite-tip {
   position: absolute;
   top: 2rem;
