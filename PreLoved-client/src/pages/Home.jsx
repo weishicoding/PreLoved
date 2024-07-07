@@ -4,6 +4,10 @@ import '../styles/home.css'
 import {ProductCard} from '../components/product/ProductCard'
 import img from '../assets/images/clothes.png'
 
+const ProductList = ({products}) => (
+  <div className="product-list gap-5 px-5">{products && products.map(product => <ProductCard key={product.id} data={product}></ProductCard>)}</div>
+)
+
 const Home = () => {
   const arrivalProducts = [
     {
@@ -22,7 +26,7 @@ const Home = () => {
       price: '$159',
       url: img
     },
-		{
+    {
       id: 3,
       name: 'Sand',
       type: 'Blouse',
@@ -38,7 +42,7 @@ const Home = () => {
       price: '$159',
       url: img
     },
-		{
+    {
       id: 5,
       name: 'Sand',
       type: 'Blouse',
@@ -54,7 +58,7 @@ const Home = () => {
       price: '$159',
       url: img
     },
-		{
+    {
       id: 7,
       name: 'Sand',
       type: 'Blouse',
@@ -70,7 +74,7 @@ const Home = () => {
       price: '$159',
       url: img
     },
-		{
+    {
       id: 9,
       name: 'Marimekko',
       type: 'Schiffon dress',
@@ -78,7 +82,7 @@ const Home = () => {
       price: '$159',
       url: img
     },
-		{
+    {
       id: 10,
       name: 'Marimekko',
       type: 'Schiffon dress',
@@ -87,8 +91,6 @@ const Home = () => {
       url: img
     }
   ]
-
-  const ProductList = ({products}) => <div className="product-list gap-5 px-5">{products && products.map(product => <ProductCard key={product.id} data={product}></ProductCard>)}</div>
 
   return (
     <>
@@ -102,7 +104,9 @@ const Home = () => {
         </div>
       </div>
       <div>
-        <div className='ps-4 py-3 font-xl fw-bold' style={{marginTop: "-7rem"}}>New arrivals</div>
+        <div className="ps-4 py-3 font-xl fw-bold" style={{marginTop: '-7rem'}}>
+          New arrivals
+        </div>
         <ProductList products={arrivalProducts} />
       </div>
     </>
