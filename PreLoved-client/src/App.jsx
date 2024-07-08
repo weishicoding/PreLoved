@@ -18,6 +18,12 @@ function App() {
       <Menu />
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route
+            path="/register"
+            element={
+                <Register />
+            }
+          ></Route>
         <Route element={<PersistLogin />}>
           <Route
             path="/login"
