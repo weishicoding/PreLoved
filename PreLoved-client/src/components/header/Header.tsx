@@ -1,34 +1,36 @@
-import React, {useEffect, useState} from 'react'
-import './header.css'
-import {Stack} from 'react-bootstrap'
-import {MdFavoriteBorder, MdOutlinePerson, MdOutlineSearch, MdOutlineShoppingCart} from 'react-icons/md'
-import {PiFireSimpleBold} from 'react-icons/pi'
-import logo from '../../assets/images/second-hand.png'
-import useAuth from '../../hooks/useAuth'
-import {useNavigate} from 'react-router-dom'
-import axios from '../../api/axios'
+import React, { useState } from 'react';
+import './header.css';
+import { Stack } from 'react-bootstrap';
+import { MdFavoriteBorder, MdOutlinePerson, MdOutlineSearch, MdOutlineShoppingCart } from 'react-icons/md';
+import { PiFireSimpleBold } from 'react-icons/pi';
+import logo from '../../assets/images/second-hand.png';
+import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import axios from '../../api/axios';
 
-const Header = () => {
-  const {auth, setAuth} = useAuth()
-  const [open, setOpen] = useState(false)
-  const navigate = useNavigate()
+const Header: React.FC = () => {
+  const { auth, setAuth } = useAuth();
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
   const handleLoginOpen = () => {
     if (!auth) {
-      navigate('/login')
+      navigate('/login');
     } else {
-      setOpen(open => !open)
+      setOpen(open => !open);
     }
-  }
+  };
+
   const handleLogout = async () => {
     try {
-      const response = await axios.get('/api/auth/logout', {withCredentials: true})
-      setAuth(null)
-      setOpen(false)
-      navigate('/login')
+      const response = await axios.get('/api/auth/logout', { withCredentials: true });
+      setAuth(null);
+      setOpen(false);
+      navigate('/login');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -44,24 +46,24 @@ const Header = () => {
             </div>
           </div>
           <div>
-            <img src={logo} className="logo"></img>
+            <img src={logo} className="logo" alt="Logo" />
           </div>
           <div className="d-flex-end d-flex icon-text">
-            <div className="icon-container ">
-              <PiFireSimpleBold size={24}></PiFireSimpleBold>
+            <div className="icon-container">
+              <PiFireSimpleBold size={24} />
               <span>Sell Now</span>
               <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-pill badge">New!</span>
             </div>
-            <div className="icon-container ">
-              <MdFavoriteBorder size={24}></MdFavoriteBorder>
+            <div className="icon-container">
+              <MdFavoriteBorder size={24} />
               <span>Favorites</span>
             </div>
             <div className="icon-container" onClick={handleLoginOpen}>
-              <MdOutlinePerson size={24}></MdOutlinePerson>
+              <MdOutlinePerson size={24} />
               <span>Account</span>
             </div>
             <div className="icon-container">
-              <MdOutlineShoppingCart size={24}></MdOutlineShoppingCart>
+              <MdOutlineShoppingCart size={24} />
               <span>Cart</span>
               <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-circle badge">12</span>
             </div>
@@ -77,7 +79,7 @@ const Header = () => {
         </Stack>
       </Stack>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
