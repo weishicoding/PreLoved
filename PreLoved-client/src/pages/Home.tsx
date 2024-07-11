@@ -1,7 +1,7 @@
 import React from 'react';
 import img1 from '../assets/images/men.jpg';
 import '../styles/home.css';
-import { ProductCard } from '../components/product/ProductCard';
+import {ProductCard} from '../components/product/ProductCard';
 import img from '../assets/images/clothes.png';
 
 // Define the Product type
@@ -19,9 +19,10 @@ interface ProductListProps {
   products: Product[];
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products }) => (
+const ProductList: React.FC<ProductListProps> = ({products}) => (
   <div className="product-list gap-5 px-5">
-    {products && products.map(product => <ProductCard key={product.id} data={product} />)}
+    {products &&
+      products.map(product => <ProductCard key={product.id} data={product} />)}
   </div>
 );
 
@@ -33,7 +34,7 @@ const Home: React.FC = () => {
       type: 'Blouse',
       size: '38',
       price: '$79',
-      url: img
+      url: img,
     },
     {
       id: 2,
@@ -41,7 +42,7 @@ const Home: React.FC = () => {
       type: 'Schiffon dress',
       size: '46',
       price: '$159',
-      url: img
+      url: img,
     },
     // more products...
   ];
@@ -60,13 +61,13 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div>
-        <div className="ps-4 py-3 font-xl fw-bold" style={{ marginTop: '-7rem' }}>
+        <div className="ps-4 py-3 font-xl fw-bold" style={{marginTop: '-7rem'}}>
           New arrivals
         </div>
         <ProductList products={arrivalProducts} />
       </div>
     </>
   );
-}
+};
 
 export default Home;

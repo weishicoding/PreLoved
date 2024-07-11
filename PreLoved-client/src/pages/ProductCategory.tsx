@@ -15,21 +15,21 @@ const categories: Category[] = [
     children: [
       {
         name: 'Sunglass',
-        count: 119
+        count: 119,
       },
       {
         name: 'Ski goggle',
-        count: 12
+        count: 12,
       },
       {
         name: 'Hats',
-        count: 1
+        count: 1,
       },
       {
         name: 'Gloves',
-        count: 2
-      }
-    ]
+        count: 2,
+      },
+    ],
   },
   {
     name: 'Shoes',
@@ -37,31 +37,37 @@ const categories: Category[] = [
     children: [
       {
         name: 'Winter shoes',
-        count: 23
+        count: 23,
       },
       {
         name: 'Boots',
-        count: 4
-      }
-    ]
-  }
+        count: 4,
+      },
+    ],
+  },
 ];
 
 interface ItemProps {
   item: Category;
 }
 
-const Item: React.FC<ItemProps> = ({ item }) => (
+const Item: React.FC<ItemProps> = ({item}) => (
   <div className="py-3 d-flex on-point">
-    <div className={item.children ? 'category-first-name' : 'category-second-name'}>{item.name}</div>
+    <div
+      className={
+        item.children ? 'category-first-name' : 'category-second-name'
+      }>
+      {item.name}
+    </div>
     <div className="category-count">({item.count})</div>
   </div>
 );
 
-const CategoryItem: React.FC<ItemProps> = ({ item }) => (
+const CategoryItem: React.FC<ItemProps> = ({item}) => (
   <div>
     <Item item={item} />
-    {item.children && item.children.map(child => <Item key={child.name} item={child} />)}
+    {item.children &&
+      item.children.map(child => <Item key={child.name} item={child} />)}
   </div>
 );
 
@@ -78,8 +84,11 @@ const ProductCategory: React.FC = () => {
           <div className="home on-point">Home</div>
           <div className="category-name">Men</div>
           <div className="category-desc">
-            The best fashion hits, design items and high-quality brands from Scandinavia - In the Emmy men's category, you will find thousands of used items: clothes, bags, shoes
-            and accessories. Among the most popular brands are Hugo Boss, Calvin Klein, Ralph Lauren, Tommy Hilfiger, Levi's, Adidas and Nike.
+            The best fashion hits, design items and high-quality brands from
+            Scandinavia - In the Emmy men's category, you will find thousands of
+            used items: clothes, bags, shoes and accessories. Among the most
+            popular brands are Hugo Boss, Calvin Klein, Ralph Lauren, Tommy
+            Hilfiger, Levi's, Adidas and Nike.
           </div>
         </div>
         <div className="img-div">

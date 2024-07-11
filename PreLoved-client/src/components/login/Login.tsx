@@ -1,18 +1,19 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, {useState, ChangeEvent, FormEvent} from 'react';
 import './index.css';
-import { Col, Form, FormGroup, Row, Stack } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {Col, Form, FormGroup, Row, Stack} from 'react-bootstrap';
+import {useLocation, useNavigate} from 'react-router-dom';
 import axios from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
 
 const LOGIN_URL = '/api/auth/login';
 
 const Login: React.FC = () => {
-  const { setAuth } = useAuth();
+  const {setAuth} = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
+  const from =
+    (location.state as {from?: {pathname: string}})?.from?.pathname || '/';
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -69,17 +70,21 @@ const Login: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(LOGIN_URL, JSON.stringify({ username, password }), {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
-      });
+      const response = await axios.post(
+        LOGIN_URL,
+        JSON.stringify({username, password}),
+        {
+          headers: {'Content-Type': 'application/json'},
+          withCredentials: true,
+        },
+      );
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
-      setAuth({ username, roles, accessToken });
+      setAuth({username, roles, accessToken});
       setUsername('');
       setPassword('');
       setFormError('');
-      navigate(from, { replace: true });
+      navigate(from, {replace: true});
     } catch (error: any) {
       if (!error.response) {
         setFormError('No Server Response');
@@ -98,7 +103,11 @@ const Login: React.FC = () => {
         <Col md="auto">
           <div className="fs-2 fw-bolder text-center">Log in or register</div>
           <Form className="form mt-4" onSubmit={handleSubmit}>
-            {formError && <div className="error-text text-center mb-3">The username or password provided is incorrect.</div>}
+            {formError && (
+              <div className="error-text text-center mb-3">
+                The username or password provided is incorrect.
+              </div>
+            )}
             <FormGroup className="mb-2">
               <Form.Label htmlFor="username">Username</Form.Label>
               <Form.Control
@@ -109,7 +118,10 @@ const Login: React.FC = () => {
                 onBlur={handleUsernameBlur}
                 onChange={handleUsernameChange}
               />
-              <Form.Text id="usernameHelpBlock" className={usernameError ? 'error-text' : ''} muted>
+              <Form.Text
+                id="usernameHelpBlock"
+                className={usernameError ? 'error-text' : ''}
+                muted>
                 {usernameError}
               </Form.Text>
             </FormGroup>
@@ -124,7 +136,10 @@ const Login: React.FC = () => {
                 onBlur={handlePasswordBlur}
                 onChange={handlePasswordChange}
               />
-              <Form.Text id="passwordHelpBlock" className={passwordError ? 'error-text' : ''} muted>
+              <Form.Text
+                id="passwordHelpBlock"
+                className={passwordError ? 'error-text' : ''}
+                muted>
                 {passwordError}
               </Form.Text>
             </FormGroup>
@@ -136,9 +151,14 @@ const Login: React.FC = () => {
             </Stack>
           </Form>
           <div className="mt-5 text-center">New here?</div>
-          <div className="mt-1 text-center">Create an account, it only takes a minute.</div>
+          <div className="mt-1 text-center">
+            Create an account, it only takes a minute.
+          </div>
           <Stack className="mt-2">
-            <button type="button" className="btn btn-register" onClick={handleRegister}>
+            <button
+              type="button"
+              className="btn btn-register"
+              onClick={handleRegister}>
               Create an account
             </button>
           </Stack>

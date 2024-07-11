@@ -1,7 +1,7 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, {useState, ChangeEvent, FormEvent} from 'react';
 import axios from '../../api/axios';
-import { Alert, Col, Form, FormGroup, Row, Stack } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import {Alert, Col, Form, FormGroup, Row, Stack} from 'react-bootstrap';
+import {useNavigate} from 'react-router-dom';
 import './index.css';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -102,13 +102,13 @@ export const Register: React.FC = () => {
       const response = await axios.post(REGISTER_URL, {
         username,
         password,
-        email
+        email,
       });
       if (response?.data) {
         setFormError('');
         setSuccess(true);
         setTimeout(() => {
-          navigate('/login', { replace: true });
+          navigate('/login', {replace: true});
           setSuccess(false);
         }, 1500);
       }
@@ -130,7 +130,9 @@ export const Register: React.FC = () => {
           )}
           <div className="fs-2 fw-bolder text-center">Create an account</div>
           <Form className="form mt-4" onSubmit={handleSubmit}>
-            {formError && <div className="error-text text-center mb-3">{formError}</div>}
+            {formError && (
+              <div className="error-text text-center mb-3">{formError}</div>
+            )}
             <FormGroup className="mb-2">
               <Form.Label htmlFor="username">Username</Form.Label>
               <Form.Control
@@ -142,7 +144,10 @@ export const Register: React.FC = () => {
                 onChange={handleUsernameChange}
                 disabled={loading}
               />
-              <Form.Text id="usernameHelpBlock" className={usernameError ? 'error-text' : ''} muted>
+              <Form.Text
+                id="usernameHelpBlock"
+                className={usernameError ? 'error-text' : ''}
+                muted>
                 {usernameError}
               </Form.Text>
             </FormGroup>
@@ -158,7 +163,10 @@ export const Register: React.FC = () => {
                 onChange={handleEmailChange}
                 disabled={loading}
               />
-              <Form.Text id="emailHelpBlock" className={emailError ? 'error-text' : ''} muted>
+              <Form.Text
+                id="emailHelpBlock"
+                className={emailError ? 'error-text' : ''}
+                muted>
                 {emailError}
               </Form.Text>
             </FormGroup>
@@ -174,13 +182,19 @@ export const Register: React.FC = () => {
                 onChange={handlePasswordChange}
                 disabled={loading}
               />
-              <Form.Text id="passwordHelpBlock" className={passwordError ? 'error-text' : ''} muted>
+              <Form.Text
+                id="passwordHelpBlock"
+                className={passwordError ? 'error-text' : ''}
+                muted>
                 {passwordError}
               </Form.Text>
             </FormGroup>
 
             <Stack className="mt-3">
-              <button type="submit" className="btn btn-login" disabled={loading}>
+              <button
+                type="submit"
+                className="btn btn-login"
+                disabled={loading}>
                 Create an account
               </button>
             </Stack>

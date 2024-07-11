@@ -8,11 +8,14 @@ interface RefreshTokenResponse {
 }
 
 export const useRefreshToken = () => {
-  const { setAuth } = useAuth();
+  const {setAuth} = useAuth();
   const refresh = async (): Promise<string> => {
-    const response = await axios.get<RefreshTokenResponse>('/api/auth/refreshToken', {
-      withCredentials: true,
-    });
+    const response = await axios.get<RefreshTokenResponse>(
+      '/api/auth/refreshToken',
+      {
+        withCredentials: true,
+      },
+    );
     setAuth((prev: any) => {
       return {
         ...prev,
