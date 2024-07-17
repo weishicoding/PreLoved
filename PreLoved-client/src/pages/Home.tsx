@@ -20,7 +20,7 @@ interface ProductListProps {
 }
 
 const ProductList: React.FC<ProductListProps> = ({products}) => (
-  <div className="product-list gap-5 px-5">
+  <div className="product-list gap-4 px-5">
     {products &&
       products.map(product => <ProductCard key={product.id} data={product} />)}
   </div>
@@ -82,46 +82,6 @@ const Home: React.FC = () => {
       type: 'Blouse',
       size: '38',
       price: '$79',
-      url: img,
-    },
-    {
-      id: 2,
-      name: 'Marimekko',
-      type: 'Schiffon dress',
-      size: '46',
-      price: '$159',
-      url: img,
-    },
-    {
-      id: 1,
-      name: 'Sand',
-      type: 'Blouse',
-      size: '38',
-      price: '$79',
-      url: img,
-    },
-    {
-      id: 2,
-      name: 'Marimekko',
-      type: 'Schiffon dress',
-      size: '46',
-      price: '$159',
-      url: img,
-    },
-    {
-      id: 1,
-      name: 'Sand',
-      type: 'Blouse',
-      size: '38',
-      price: '$79',
-      url: img,
-    },
-    {
-      id: 2,
-      name: 'Marimekko',
-      type: 'Schiffon dress',
-      size: '46',
-      price: '$159',
       url: img,
     },
     // more products...
