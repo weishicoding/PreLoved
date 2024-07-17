@@ -24,7 +24,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
   };
 
   return (
-    <Card style={{ maxWidth: "13rem", border: "none" }}>
+    <Card style={{ maxWidth: "13rem",minWidth: "13rem", border: "none" }}>
       <div className="bg-secondary">
         <div className="d-flex justify-content-between px-3 pt-2 head-div">
           <div className="font-xxs text-light fw-bold bg-thirdary p-1 rounded">
