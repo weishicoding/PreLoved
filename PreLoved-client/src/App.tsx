@@ -9,6 +9,7 @@ import {Register} from './components/login/Register';
 import Home from './pages/Home';
 import './App.css';
 import './styles/style.css';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Menu />
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/products" element={<ProductDetail />} />
         <Route path="/register" element={<Register />}></Route>
         <Route element={<PersistLogin />}>
           <Route
