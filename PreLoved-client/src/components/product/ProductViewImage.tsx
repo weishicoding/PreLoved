@@ -1,4 +1,3 @@
-import React from 'react';
 import '../../styles/prodectViewDetail.css';
 import {Image} from 'react-bootstrap';
 import img from '../..//assets/images/clothes.png';
